@@ -8,7 +8,7 @@ import { Avatar } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { supabase } from '@/lib/supabase'
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts'
-import { Award, Flame, Trophy, ArrowRight } from 'lucide-react'
+import { Award, Flame, Trophy, ArrowRight, LogOut } from 'lucide-react'
 
 const PHASES = [
   { id: 1, name: 'Attention: CRT Lab', path: '/student/phase1', color: '#6C63FF' },
@@ -19,7 +19,7 @@ const PHASES = [
 
 export function StudentDashboard() {
   const navigate = useNavigate()
-  const { profile } = useAuthStore()
+  const { profile, signOut } = useAuthStore()
   const { t } = useTranslation()
   const [phaseProgress, setPhaseProgress] = useState<any[]>([])
   const [leaderboard, setLeaderboard] = useState<any[]>([])
@@ -71,14 +71,14 @@ export function StudentDashboard() {
 
   return (
     <div className="min-h-screen bg-space">
-      <aside className="fixed left-0 top-0 h-full w-64 bg-surface/30 border-r border-surface p-6 hidden lg:block">
+      <aside className="fixed left-0 top-0 h-full w-64 bg-surface/30 border-r border-surface p-6 hidden lg:flex lg:flex-col">
         <div className="flex flex-col items-center mb-8">
           <Avatar seed={profile.avatar_seed} size={80} />
           <h2 className="text-lg font-bold text-text-primary mt-3">{profile.name}</h2>
           <Badge variant="outline" className="mt-1 capitalize">{profile.role}</Badge>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-4 flex-1">
           <div className="rounded-lg bg-surface/50 p-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-text-muted">{t('xp')}</span>
@@ -106,6 +106,13 @@ export function StudentDashboard() {
             </div>
           </div>
         </div>
+        <button
+          onClick={() => { signOut(); navigate('/login') }}
+          className="flex items-center gap-2 rounded-lg px-3 py-2 text-text-muted hover:text-text-primary hover:bg-surface/50 transition-all mt-auto"
+        >
+          <LogOut className="w-4 h-4" />
+          Sign out
+        </button>
       </aside>
 
       <main className="lg:ml-64 p-6">

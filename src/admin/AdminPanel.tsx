@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { supabase } from '@/lib/supabase'
+import { useAuthStore } from '@/store/authStore'
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
-import { Users, Award, Zap, TrendingUp, Brain } from 'lucide-react'
+import { Users, Award, Zap, TrendingUp, Brain, LogOut } from 'lucide-react'
 
 export function AdminPanel() {
+  const { signOut } = useAuthStore()
   const [stats, setStats] = useState({
     totalStudents: 0,
     avgCompletion: 0,
@@ -88,7 +90,16 @@ export function AdminPanel() {
   return (
     <div className="min-h-screen bg-space p-6">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-text-primary font-display mb-8">Admin Panel</h1>
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl font-bold text-text-primary font-display">Admin Panel</h1>
+          <button
+            onClick={() => { signOut(); window.location.href = '/login' }}
+            className="flex items-center gap-2 rounded-lg px-3 py-2 text-text-muted hover:text-text-primary hover:bg-surface/50 transition-all"
+          >
+            <LogOut className="w-4 h-4" />
+            Sign out
+          </button>
+        </div>
 
         <div className="grid grid-cols-4 gap-4 mb-8">
           <Card>

@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
+import { useAuthStore } from '@/store/authStore'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { supabase } from '@/lib/supabase'
-import { Eye, EyeOff, Users, Activity } from 'lucide-react'
+import { Eye, EyeOff, Users, Activity, LogOut } from 'lucide-react'
 
 export function TeacherPanel() {
+  const { signOut } = useAuthStore()
   const [students, setStudents] = useState<any[]>([])
   const [hypotheses, setHypotheses] = useState<any[]>([])
   const [frozen, setFrozen] = useState(false)
@@ -70,10 +72,19 @@ export function TeacherPanel() {
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold text-text-primary font-display">Teacher Panel</h1>
-          <Button onClick={toggleFreeze} variant={frozen ? 'destructive' : 'outline'}>
-            {frozen ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
-            {frozen ? 'Unfreeze Screens' : 'Freeze Screens'}
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button onClick={toggleFreeze} variant={frozen ? 'destructive' : 'outline'}>
+              {frozen ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
+              {frozen ? 'Unfreeze Screens' : 'Freeze Screens'}
+            </Button>
+            <button
+              onClick={() => { signOut(); window.location.href = '/login' }}
+              className="flex items-center gap-2 rounded-lg px-3 py-2 text-text-muted hover:text-text-primary hover:bg-surface/50 transition-all"
+            >
+              <LogOut className="w-4 h-4" />
+              Sign out
+            </button>
+          </div>
         </div>
 
         <div className="grid grid-cols-3 gap-4 mb-8">
