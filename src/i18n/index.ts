@@ -1,0 +1,153 @@
+import i18n from 'i18next'
+import { initReactI18next } from 'react-i18next'
+import LanguageDetector from 'i18next-browser-languagedetector'
+
+const resources = {
+  en: {
+    translation: {
+      // Auth
+      login: 'Login',
+      register: 'Register',
+      email: 'Email',
+      password: 'Password',
+      name: 'Name',
+      section: 'Section',
+      rollNo: 'Roll No',
+      preferredLanguage: 'Preferred Language',
+      english: 'English',
+      malayalam: 'Malayalam',
+
+      // Navigation
+      dashboard: 'Dashboard',
+      phase1: 'Phase 1: CRT Lab',
+      phase2: 'Phase 2: Electron Spotter',
+      phase3: 'Phase 3: Virtual Lab',
+      phase4: 'Phase 4: Story & Escape',
+
+      // Phase 1
+      hypothesisPrompt: 'What do you think is travelling inside the tube?',
+      submitHypothesis: 'Submit Hypothesis',
+      voltage: 'Voltage',
+      pressure: 'Gas Pressure',
+      magneticField: 'Magnetic Field',
+      electricField: 'Electric Field',
+      low: 'Low',
+      medium: 'Medium',
+      high: 'High',
+      reset: 'Reset',
+      classHypotheses: 'Class Hypotheses',
+
+      // Phase 2
+      tapDevice: 'Tap a device to tag its role',
+      progress: 'Progress',
+      taggedCorrectly: 'tagged correctly',
+
+      // Phase 3
+      predict: 'Predict',
+      observation: 'Observation',
+      yourExplanation: 'Your Explanation',
+      hint: 'Hint',
+      trial: 'Trial',
+      correct: 'Correct!',
+      wrong: 'Wrong!',
+
+      // Phase 4
+      storyCreator: 'Story Creator',
+      escapeRoom: 'Escape Room',
+      submitStory: 'Submit Story',
+      suggestNext: 'Suggest Next Sentence',
+      unlockDoor: 'Unlock Door',
+      certificate: 'Certificate',
+      download: 'Download',
+      share: 'Share',
+
+      // Badges
+      firstHypothesis: 'First Hypothesis',
+      connection: 'Connection Maker',
+      predictor: 'Predictor',
+      labMaster: 'Lab Master',
+      storyteller: 'Storyteller',
+      electronExplorer: 'Electron Explorer',
+      topOfClass: 'Top of Class',
+
+      // Common
+      loading: 'Loading...',
+      error: 'Error',
+      continue: 'Continue',
+      back: 'Back',
+      xp: 'XP',
+      streak: 'Day Streak',
+      leaderboard: 'Leaderboard',
+    },
+  },
+  ml: {
+    translation: {
+      login: 'ലോഗിൻ',
+      register: 'രജിസ്റ്റർ',
+      email: 'ഇമെയിൽ',
+      password: 'പാസ്‌വേഡ്',
+      name: 'പേര്',
+      section: 'വിഭാഗം',
+      rollNo: 'റോൾ നമ്പർ',
+      preferredLanguage: 'ഇഷ്ടപ്പെട്ട ഭാഷ',
+      english: 'ഇംഗ്ലീഷ്',
+      malayalam: 'മലയാളം',
+      dashboard: 'ഡാഷ്‌ബോർഡ്',
+      phase1: 'ഘട്ടം 1: CRT ലാബ്',
+      phase2: 'ഘട്ടം 2: ഇലക്ട്രോൺ സ്പോട്ടർ',
+      phase3: 'ഘട്ടം 3: വെർച്വൽ ലാബ്',
+      phase4: 'ഘട്ടം 4: കഥയും എസ്കേപ്പും',
+      hypothesisPrompt: 'ട്യൂബിനുള്ളിൽ എന്താണ് സഞ്ചരിക്കുന്നതെന്ന് നിങ്ങൾ കരുതുന്നു?',
+      submitHypothesis: 'അനുമാനം സമർപ്പിക്കുക',
+      voltage: 'വോൾട്ടേജ്',
+      pressure: 'വാതക മർദ്ദം',
+      magneticField: 'കാന്തിക മണ്ഡലം',
+      electricField: 'വൈദ്യുത മണ്ഡലം',
+      low: 'കുറവ്',
+      medium: 'ഇടത്തരം',
+      high: 'കൂടുതൽ',
+      reset: 'പുനഃക്രമീകരിക്കുക',
+      classHypotheses: 'ക്ലാസ് അനുമാനങ്ങൾ',
+      tapDevice: 'ഉപകരണത്തിൽ ടാപ്പുചെയ്യുക',
+      progress: 'പുരോഗതി',
+      taggedCorrectly: 'ശരിയായി ടാഗ് ചെയ്തു',
+      predict: 'പ്രവചിക്കുക',
+      observation: 'നിരീക്ഷണം',
+      yourExplanation: 'നിങ്ങളുടെ വിശദീകരണം',
+      hint: 'സൂചന',
+      trial: 'പരീക്ഷണം',
+      correct: 'ശരി!',
+      wrong: 'തെറ്റ്!',
+      storyCreator: 'കഥാ രചയിതാവ്',
+      escapeRoom: 'എസ്കേപ്പ് റൂം',
+      submitStory: 'കഥ സമർപ്പിക്കുക',
+      suggestNext: 'അടുത്ത വാചകം നിർദ്ദേശിക്കുക',
+      unlockDoor: 'വാതിൽ തുറക്കുക',
+      certificate: 'സർട്ടിഫിക്കറ്റ്',
+      download: 'ഡൗൺലോഡ്',
+      share: 'പങ്കിടുക',
+      firstHypothesis: 'ആദ്യ അനുമാനം',
+      connection: 'കണക്ഷൻ മേക്കർ',
+      predictor: 'പ്രവാചകൻ',
+      labMaster: 'ലാബ് മാസ്റ്റർ',
+      storyteller: 'കഥാകാരൻ',
+      electronExplorer: 'ഇലക്ട്രോൺ എക്സ്പ്ലോറർ',
+      topOfClass: 'ക്ലാസിൽ മികച്ചത്',
+      loading: 'ലോഡ് ചെയ്യുന്നു...',
+      error: 'പിശക്',
+      continue: 'തുടരുക',
+      back: 'പിന്നിലേക്ക്',
+      xp: 'എക്സ്പി',
+      streak: 'ദിന ശൃംഖല',
+      leaderboard: 'ലീഡർബോർഡ്',
+    },
+  },
+}
+
+i18n.use(LanguageDetector).use(initReactI18next).init({
+  resources,
+  fallbackLng: 'en',
+  interpolation: { escapeValue: false },
+})
+
+export default i18n
