@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="120" y2="120">
+      <stop offset="0%" stop-color="#6C63FF"/>
+      <stop offset="100%" stop-color="#00D4AA"/>
+    </linearGradient>
+  </defs>
+  <!-- Background circle -->
+  <circle cx="60" cy="60" r="56" fill="#0f172a" stroke="url(#g1)" stroke-width="3"/>
+  <!-- Orbit rings -->
+  <ellipse cx="60" cy="60" rx="38" ry="14" stroke="#6C63FF40" stroke-width="1.5" fill="none" transform="rotate(-30 60 60)"/>
+  <ellipse cx="60" cy="60" rx="38" ry="14" stroke="#00D4AA40" stroke-width="1.5" fill="none" transform="rotate(30 60 60)"/>
+  <ellipse cx="60" cy="60" rx="38" ry="14" stroke="#6C63FF30" stroke-width="1" fill="none" transform="rotate(90 60 60)"/>
+  <!-- Nucleus -->
+  <circle cx="60" cy="60" r="10" fill="url(#g1)" opacity="0.9"/>
+  <circle cx="60" cy="60" r="6" fill="#ffffff" opacity="0.3"/>
+  <!-- Electron -->
+  <circle cx="92" cy="48" r="5" fill="#6C63FF"/>
+  <circle cx="92" cy="48" r="8" fill="#6C63FF20"/>
+  <!-- Text -->
+  <text x="60" y="110" text-anchor="middle" fill="#6C63FF" font-family="system-ui" font-size="11" font-weight="bold" letter-spacing="3">ELECTRONIQ</text>
+</svg>

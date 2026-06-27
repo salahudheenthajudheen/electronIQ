@@ -18,7 +18,7 @@ export function RoleGuard({ allowedRoles, children }: RoleGuardProps) {
   }
 
   if (!profile) {
-    return <Navigate to="/login" replace />
+    return <Navigate to="/register" replace />
   }
 
   if (!allowedRoles.includes(profile.role)) {

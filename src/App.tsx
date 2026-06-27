@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useAuthStore } from '@/store/authStore'
-import { Login, Register, Onboarding, RoleGuard } from '@/auth'
+import { Register, AdminLogin, RoleGuard } from '@/auth'
 import { StudentDashboard } from '@/student/StudentDashboard'
 import { TeacherPanel } from '@/teacher/TeacherPanel'
 import { AdminPanel } from '@/admin/AdminPanel'
@@ -9,6 +9,7 @@ import { Phase1Page } from '@/phases/phase1/Phase1Page'
 import { Phase2Page } from '@/phases/phase2/Phase2Page'
 import { Phase3Page } from '@/phases/phase3/Phase3Page'
 import { Phase4Page } from '@/phases/phase4/Phase4Page'
+import ModulePhasePage from '@/phases/ModulePhasePage'
 import { ToastContainer } from '@/components/ui/toast'
 
 function App() {
@@ -30,9 +31,9 @@ function App() {
     <BrowserRouter>
       <ToastContainer />
       <Routes>
-        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/onboarding" element={<Onboarding />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/onboarding" element={<Navigate to="/register" replace />} />
 
         <Route
           path="/student/dashboard"
@@ -74,6 +75,14 @@ function App() {
             </RoleGuard>
           }
         />
+        <Route
+          path="/student/module/:moduleId/phase/:phaseNum"
+          element={
+            <RoleGuard allowedRoles={['student']}>
+              <ModulePhasePage />
+            </RoleGuard>
+          }
+        />
 
         <Route
           path="/teacher/*"
@@ -92,7 +101,7 @@ function App() {
           }
         />
 
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/" element={<Navigate to="/register" replace />} />
       </Routes>
     </BrowserRouter>
   )

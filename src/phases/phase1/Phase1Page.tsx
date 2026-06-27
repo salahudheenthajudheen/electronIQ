@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useGameStore } from '@/store/gameStore'
 import { useAuthStore } from '@/store/authStore'
-import { CRTScene } from './CRTScene'
+import CRTScene from './CRTScene'
 import { HypothesisBuilder } from './HypothesisBuilder'
 import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
@@ -60,7 +60,7 @@ export function Phase1Page() {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => window.location.href = '/dashboard'}
+              onClick={() => window.location.href = '/student/dashboard'}
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>

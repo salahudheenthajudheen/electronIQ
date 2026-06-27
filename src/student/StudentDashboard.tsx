@@ -8,20 +8,26 @@ import { Avatar } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { supabase } from '@/lib/supabase'
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts'
-import { Award, Flame, Trophy, ArrowRight, LogOut } from 'lucide-react'
+import { Award, Flame, Trophy, ArrowRight, LogOut, Atom, Microscope, Hash, Radiation, Orbit, Layers, Sparkles, Sigma, Shapes, Squirrel as Square, Orbit as OrbitIcon, Zap } from 'lucide-react'
+import { modulesData } from '@/data/moduleData'
 
-const PHASES = [
-  { id: 1, name: 'Attention: CRT Lab', path: '/student/phase1', color: '#6C63FF' },
-  { id: 2, name: 'Relevance: Electron Spotter', path: '/student/phase2', color: '#00D4AA' },
-  { id: 3, name: 'Confidence: Virtual Lab', path: '/student/phase3', color: '#F59E0B' },
-  { id: 4, name: 'Satisfaction: Story & Escape', path: '/student/phase4', color: '#FF6B9D' },
-]
+const MODULE_CONFIG = modulesData.map(m => {
+  const icons = [Atom, Microscope, Hash, Radiation, Orbit, Layers, Sparkles, Sigma, Shapes, Square, OrbitIcon, Zap]
+  return {
+    id: m.id,
+    name: m.shortTitle,
+    fullTitle: m.title,
+    path: m.id === 1 ? '/student/phase1' : `/student/module/${m.id}/phase/1`,
+    color: m.color,
+    icon: icons[m.id - 1] || Atom,
+    description: m.description,
+  }
+})
 
 export function StudentDashboard() {
   const navigate = useNavigate()
   const { profile, signOut } = useAuthStore()
   const { t } = useTranslation()
-  const [phaseProgress, setPhaseProgress] = useState<any[]>([])
   const [leaderboard, setLeaderboard] = useState<any[]>([])
   const [myXp, setMyXp] = useState(0)
   const [streak, setStreak] = useState(0)
@@ -36,15 +42,13 @@ export function StudentDashboard() {
   const loadData = async () => {
     if (!profile) return
 
-    const [progressRes, lbRes, badgesRes, eventsRes] = await Promise.all([
-      supabase.from('phase_progress').select('*').eq('student_id', profile.id),
+    const [lbRes, badgesRes, eventsRes] = await Promise.all([
       supabase.from('leaderboard').select('*').eq('student_id', profile.id).single(),
       supabase.from('badges').select('badge_type').eq('student_id', profile.id),
       supabase.from('events').select('created_at, metadata').eq('student_id', profile.id)
         .eq('event_type', 'xp_earned').order('created_at', { ascending: true }).limit(7),
     ])
 
-    if (progressRes.data) setPhaseProgress(progressRes.data)
     if (lbRes.data) { setMyXp(lbRes.data.total_xp); setStreak(lbRes.data.streak_days) }
     if (badgesRes.data) setBadges(badgesRes.data.map(b => b.badge_type))
     
@@ -56,15 +60,6 @@ export function StudentDashboard() {
 
     const topRes = await supabase.from('leaderboard').select('*, profiles(name)').order('total_xp', { ascending: false }).limit(5)
     if (topRes.data) setLeaderboard(topRes.data)
-  }
-
-  const getPhaseStatus = (phaseId: number) => {
-    const p = phaseProgress.find(pp => pp.phase === phaseId)
-    if (!p) return { completion: 0, timeSpent: 0 }
-    return {
-      completion: p.status === 'completed' ? 100 : p.status === 'in_progress' ? 50 : 0,
-      timeSpent: p.time_spent_seconds || 0,
-    }
   }
 
   if (!profile) return null
@@ -116,25 +111,37 @@ export function StudentDashboard() {
       </aside>
 
       <main className="lg:ml-64 p-6">
-        <div className="max-w-5xl mx-auto">
-          <h1 className="text-3xl font-bold text-text-primary font-display mb-8">{t('dashboard')}</h1>
+        <div className="max-w-6xl mx-auto">
+          <h1 className="text-3xl font-bold text-text-primary font-display mb-2">{t('dashboard')}</h1>
+          <p className="text-sm text-text-muted mb-8">Class 11 Chemistry — ARCS Learning Modules</p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-            {PHASES.map(phase => {
-              const status = getPhaseStatus(phase.id)
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+            {MODULE_CONFIG.map(mod => {
+              const Icon = mod.icon
               return (
-                <Card key={phase.id} className="hover:border-primary/30 transition-all cursor-pointer group"
-                  onClick={() => navigate(phase.path)}>
-                  <CardContent>
+                <Card key={mod.id} className="hover:border-primary/30 transition-all cursor-pointer group"
+                  onClick={() => navigate(mod.path)}>
+                  <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-semibold text-text-muted">Phase {phase.id}</span>
+                      <span
+                        className="text-xs font-semibold px-2 py-0.5 rounded-full"
+                        style={{ backgroundColor: mod.color + '20', color: mod.color }}
+                      >
+                        Module {mod.id}
+                      </span>
                       <ArrowRight className="w-4 h-4 text-text-muted group-hover:text-primary transition-all" />
                     </div>
-                    <h3 className="text-lg font-semibold text-text-primary mb-1">{phase.name}</h3>
-                    <Progress value={status.completion} className="mb-2" />
-                    <div className="flex justify-between text-xs text-text-muted">
-                      <span>{status.completion}% complete</span>
-                      <span>{Math.floor(status.timeSpent / 60)}m spent</span>
+                    <div className="flex items-start gap-3">
+                      <div
+                        className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
+                        style={{ backgroundColor: mod.color + '15' }}
+                      >
+                        <Icon className="h-5 w-5" style={{ color: mod.color }} />
+                      </div>
+                      <div className="min-w-0">
+                        <h3 className="text-base font-semibold text-text-primary mb-0.5 leading-tight">{mod.name}</h3>
+                        <p className="text-xs text-text-muted line-clamp-2">{mod.description}</p>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>

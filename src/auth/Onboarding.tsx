@@ -67,7 +67,8 @@ export function Onboarding() {
     <div className="min-h-screen bg-space flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-center text-2xl">Setup Your Profile</CardTitle>
+          <CardTitle className="text-center text-2xl">Welcome to ElectronIQ!</CardTitle>
+          <p className="text-center text-sm text-text-muted mt-1">Set up your profile to start exploring Class 11 Chemistry</p>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
