@@ -17,6 +17,7 @@ export function HintButton({ studentId, questionContext, language, tier, onHintR
   const { t } = useTranslation()
 
   const requestHint = async () => {
+    if (!studentId) return
     setLoading(true)
     const { data } = await supabase.functions.invoke('hint-generator', {
       body: { student_id: studentId, tier, language, question_context: questionContext },

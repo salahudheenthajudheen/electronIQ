@@ -8,7 +8,7 @@ import { Avatar } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { supabase } from '@/lib/supabase'
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts'
-import { Award, Flame, Trophy, ArrowRight, LogOut, Menu, X, Atom, Microscope, Hash, Radiation, Orbit, Layers, Sparkles, Sigma, Shapes, Squirrel as Square, Orbit as OrbitIcon, Zap } from 'lucide-react'
+import { Award, Flame, Trophy, ArrowRight, LogOut, Menu, X, Atom, Microscope, Hash, Radiation, Orbit, Layers, Sparkles, Sigma, Shapes, Squirrel as Square, Orbit as OrbitIcon, Zap, UserPlus } from 'lucide-react'
 import { modulesData } from '@/data/moduleData'
 
 const ICONS = [Atom, Microscope, Hash, Radiation, Orbit, Layers, Sparkles, Sigma, Shapes, Square, OrbitIcon, Zap]
@@ -63,7 +63,6 @@ export function StudentDashboard() {
     const topRes = await supabase.from('leaderboard').select('*, profiles(name)').order('total_xp', { ascending: false }).limit(5)
     if (topRes.data) setLeaderboard(topRes.data)
 
-    // Compute module progress
     if (progressRes.data) {
       const byModule: Record<number, { done: number; total: number }> = {}
       progressRes.data.forEach((p: any) => {
@@ -81,9 +80,7 @@ export function StudentDashboard() {
     navigate('/register')
   }
 
-  if (!profile) return null
-
-  const sidebar = (
+  const sidebar = profile ? (
     <aside className={`${sidebarOpen ? 'fixed inset-0 z-50 flex' : 'hidden'} lg:flex lg:relative lg:w-64 bg-surface/30 border-r border-surface p-6 flex-col`}>
       {sidebarOpen && (
         <button onClick={() => setSidebarOpen(false)} className="absolute top-4 right-4 lg:hidden text-text-muted hover:text-text-primary">
@@ -127,7 +124,7 @@ export function StudentDashboard() {
         Sign out
       </button>
     </aside>
-  )
+  ) : null
 
   return (
     <div className="min-h-screen bg-space">
@@ -144,11 +141,32 @@ export function StudentDashboard() {
       {sidebarOpen && <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />}
       {sidebar}
 
-      <main className="lg:ml-64 p-4 sm:p-6">
+      <main className={profile ? 'lg:ml-64 p-4 sm:p-6' : 'p-4 sm:p-6'}>
         <div className="max-w-6xl mx-auto">
-          <div className="hidden lg:block">
-            <h1 className="text-3xl font-bold text-text-primary font-display mb-2">{t('dashboard')}</h1>
-            <p className="text-sm text-text-muted mb-8">Class 11 Chemistry — ARCS Learning Modules</p>
+          <div className="hidden lg:flex items-center justify-between mb-8">
+            <div>
+              <h1 className="text-3xl font-bold text-text-primary font-display mb-2">{t('dashboard')}</h1>
+              <p className="text-sm text-text-muted">Class 11 Chemistry — ARCS Learning Modules</p>
+            </div>
+            {!profile && (
+              <button onClick={() => navigate('/register')}
+                className="flex items-center gap-2 rounded-lg bg-primary/10 border border-primary/30 px-4 py-2 text-sm text-primary hover:bg-primary/20 transition-all">
+                <UserPlus className="w-4 h-4" />
+                Register to save progress
+              </button>
+            )}
+          </div>
+
+          <div className="lg:hidden mb-4">
+            {!profile && (
+              <button onClick={() => navigate('/register')}
+                className="w-full flex items-center justify-center gap-2 rounded-lg bg-primary/10 border border-primary/30 px-4 py-2 text-sm text-primary hover:bg-primary/20 transition-all mb-4">
+                <UserPlus className="w-4 h-4" />
+                Register to save progress
+              </button>
+            )}
+            <h1 className="text-2xl font-bold text-text-primary font-display mb-1">{t('dashboard')}</h1>
+            <p className="text-sm text-text-muted">Class 11 Chemistry — ARCS Learning Modules</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-8">
@@ -192,15 +210,19 @@ export function StudentDashboard() {
                 <CardTitle className="text-text-primary text-base sm:text-lg">XP History (7 days)</CardTitle>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={200}>
-                  <AreaChart data={xpHistory}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                    <XAxis dataKey="day" stroke="#94a3b8" fontSize={12} />
-                    <YAxis stroke="#94a3b8" fontSize={12} />
-                    <Tooltip contentStyle={{ backgroundColor: '#111827', border: '1px solid #334155', borderRadius: '8px' }} labelStyle={{ color: '#f1f5f9' }} />
-                    <Area type="monotone" dataKey="xp" stroke="#6C63FF" fill="#6C63FF" fillOpacity={0.1} />
-                  </AreaChart>
-                </ResponsiveContainer>
+                {profile ? (
+                  <ResponsiveContainer width="100%" height={200}>
+                    <AreaChart data={xpHistory}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+                      <XAxis dataKey="day" stroke="#94a3b8" fontSize={12} />
+                      <YAxis stroke="#94a3b8" fontSize={12} />
+                      <Tooltip contentStyle={{ backgroundColor: '#111827', border: '1px solid #334155', borderRadius: '8px' }} labelStyle={{ color: '#f1f5f9' }} />
+                      <Area type="monotone" dataKey="xp" stroke="#6C63FF" fill="#6C63FF" fillOpacity={0.1} />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <p className="text-xs text-text-muted text-center py-8">Register to track your XP history</p>
+                )}
               </CardContent>
             </Card>
 

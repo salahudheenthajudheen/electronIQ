@@ -1,6 +1,4 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { useEffect } from 'react'
-import { useAuthStore } from '@/store/authStore'
 import { Register, AdminLogin, RoleGuard } from '@/auth'
 import { StudentDashboard } from '@/student/StudentDashboard'
 import { TeacherPanel } from '@/teacher/TeacherPanel'
@@ -13,20 +11,6 @@ import ModulePhasePage from '@/phases/ModulePhasePage'
 import { ToastContainer } from '@/components/ui/toast'
 
 function App() {
-  const { loadProfile, loading } = useAuthStore()
-
-  useEffect(() => {
-    loadProfile()
-  }, [])
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-space flex items-center justify-center text-text-primary">
-        Loading...
-      </div>
-    )
-  }
-
   return (
     <BrowserRouter>
       <ToastContainer />
@@ -35,54 +19,12 @@ function App() {
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/onboarding" element={<Navigate to="/register" replace />} />
 
-        <Route
-          path="/student/dashboard"
-          element={
-            <RoleGuard allowedRoles={['student']}>
-              <StudentDashboard />
-            </RoleGuard>
-          }
-        />
-        <Route
-          path="/student/phase1"
-          element={
-            <RoleGuard allowedRoles={['student']}>
-              <Phase1Page />
-            </RoleGuard>
-          }
-        />
-        <Route
-          path="/student/phase2"
-          element={
-            <RoleGuard allowedRoles={['student']}>
-              <Phase2Page />
-            </RoleGuard>
-          }
-        />
-        <Route
-          path="/student/phase3"
-          element={
-            <RoleGuard allowedRoles={['student']}>
-              <Phase3Page />
-            </RoleGuard>
-          }
-        />
-        <Route
-          path="/student/phase4"
-          element={
-            <RoleGuard allowedRoles={['student']}>
-              <Phase4Page />
-            </RoleGuard>
-          }
-        />
-        <Route
-          path="/student/module/:moduleId/phase/:phaseNum"
-          element={
-            <RoleGuard allowedRoles={['student']}>
-              <ModulePhasePage />
-            </RoleGuard>
-          }
-        />
+        <Route path="/student/dashboard" element={<StudentDashboard />} />
+        <Route path="/student/phase1" element={<Phase1Page />} />
+        <Route path="/student/phase2" element={<Phase2Page />} />
+        <Route path="/student/phase3" element={<Phase3Page />} />
+        <Route path="/student/phase4" element={<Phase4Page />} />
+        <Route path="/student/module/:moduleId/phase/:phaseNum" element={<ModulePhasePage />} />
 
         <Route
           path="/teacher/*"
@@ -101,7 +43,7 @@ function App() {
           }
         />
 
-        <Route path="/" element={<Navigate to="/register" replace />} />
+        <Route path="/" element={<Navigate to="/student/dashboard" replace />} />
       </Routes>
     </BrowserRouter>
   )

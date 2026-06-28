@@ -65,13 +65,15 @@ export function EscapeRoom({ studentId, onComplete }: EscapeRoomProps) {
     const question = room.questions[currentQuestion]
     const correct = answerIndex === question.correct
 
-    await supabase.from('quiz_attempts').insert({
-      student_id: studentId,
-      room_number: currentRoom,
-      question_id: `room${currentRoom}_q${currentQuestion}`,
-      answer: question.options[answerIndex],
-      correct,
-    })
+    if (studentId) {
+      await supabase.from('quiz_attempts').insert({
+        student_id: studentId,
+        room_number: currentRoom,
+        question_id: `room${currentRoom}_q${currentQuestion}`,
+        answer: question.options[answerIndex],
+        correct,
+      })
+    }
 
     if (correct) {
       const newCorrect = roomCorrect + 1
@@ -86,11 +88,15 @@ export function EscapeRoom({ studentId, onComplete }: EscapeRoomProps) {
         setCompletedRooms(newCompleted)
         setShowResult(true)
         
-        await awardAndToast(studentId, 50, 4, `${room.name} cleared! +50 XP`)
+        if (studentId) {
+          await awardAndToast(studentId, 50, 4, `${room.name} cleared! +50 XP`)
+        }
         
         if (newCompleted.size === 5) {
           setAllComplete(true)
-          await awardAndToast(studentId, 200, 4, 'Escape Room Complete! +200 XP')
+          if (studentId) {
+            await awardAndToast(studentId, 200, 4, 'Escape Room Complete! +200 XP')
+          }
           onComplete()
         }
       }

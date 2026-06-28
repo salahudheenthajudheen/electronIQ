@@ -137,31 +137,33 @@ export function Phase3Page() {
 
     const correct = isCorrectPrediction(prediction, magField, elecField)
 
-    const { data: trialData, error } = await supabase
-      .from('sim_trials')
-      .insert({
-        student_id: studentId,
-        phase: 3,
-        voltage,
-        pressure,
-        mag_field: magField,
-        elec_field: elecField,
-        prediction,
-        correct,
-      })
-      .select()
-      .single()
+    if (studentId) {
+      const { data: trialData, error } = await supabase
+        .from('sim_trials')
+        .insert({
+          student_id: studentId,
+          phase: 3,
+          voltage,
+          pressure,
+          mag_field: magField,
+          elec_field: elecField,
+          prediction,
+          correct,
+        })
+        .select()
+        .maybeSingle()
 
-    if (!error && trialData) {
-      await awardXP(studentId, XP_VALUES.SIM_TRIAL, 3)
-      if (correct) {
-        await awardXP(studentId, XP_VALUES.CORRECT_PREDICTION_BONUS, 3)
+      if (!error && trialData) {
+        await awardXP(studentId, XP_VALUES.SIM_TRIAL, 3)
+        if (correct) {
+          await awardXP(studentId, XP_VALUES.CORRECT_PREDICTION_BONUS, 3)
+        }
+        await loadTrials(studentId)
       }
-      await loadTrials(studentId)
     }
 
     let explanation: string | undefined
-    if (!correct) {
+    if (!correct && studentId) {
       const { data: microData } = await supabase.functions.invoke('micro-explanation', {
         body: {
           student_id: studentId,
@@ -310,7 +312,7 @@ export function Phase3Page() {
           <ObservationTable trials={typedTrials} />
         </div>
 
-        {typedTrials.length > 0 && (
+        {typedTrials.length > 0 && studentId && (
           <div className="rounded-xl border border-surface bg-surface/30 p-4">
             <h2 className="text-lg font-semibold text-text-primary mb-3">Need a Hint?</h2>
             <div className="flex gap-2">
@@ -331,6 +333,11 @@ export function Phase3Page() {
             </div>
           </div>
         )}
+        {typedTrials.length > 0 && !studentId && (
+          <div className="rounded-xl border border-surface bg-surface/30 p-4 text-center">
+            <p className="text-sm text-text-muted">Register to unlock hints and track your progress</p>
+          </div>
+        )}
 
         {trialCount >= 9 && !showWorksheet && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
@@ -340,9 +347,14 @@ export function Phase3Page() {
           </motion.div>
         )}
 
-        {showWorksheet && (
+        {showWorksheet && studentId && (
           <div className="rounded-xl border border-surface bg-surface/30 p-4">
             <WorksheetSection studentId={studentId} onComplete={() => {}} />
+          </div>
+        )}
+        {showWorksheet && !studentId && (
+          <div className="rounded-xl border border-surface bg-surface/30 p-4 text-center">
+            <p className="text-sm text-text-muted">Register to access the consolidation worksheet</p>
           </div>
         )}
       </motion.div>

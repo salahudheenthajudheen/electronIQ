@@ -41,7 +41,7 @@ export function StoryCreator({ studentId, language, onSubmitted }: StoryCreatorP
   })
 
   const handleSuggest = async () => {
-    if (!editor || !selectedOption) return
+    if (!editor || !selectedOption || !studentId) return
     setAiLoading(true)
     const draftText = editor.getText()
     
@@ -63,7 +63,7 @@ export function StoryCreator({ studentId, language, onSubmitted }: StoryCreatorP
   }
 
   const handleSubmit = async () => {
-    if (!editor || !selectedOption) return
+    if (!editor || !selectedOption || !studentId) return
     const content = editor.getJSON()
     
     await supabase.from('story_drafts').insert({
@@ -135,10 +135,17 @@ export function StoryCreator({ studentId, language, onSubmitted }: StoryCreatorP
             </div>
           )}
 
-          <Button onClick={handleSubmit} className="w-full">
-            <Send className="w-4 h-4 mr-2" />
-            {t('submitStory')}
-          </Button>
+          {!studentId ? (
+            <Button onClick={() => window.location.href = '/register'} className="w-full">
+              <Send className="w-4 h-4 mr-2" />
+              Register to Submit
+            </Button>
+          ) : (
+            <Button onClick={handleSubmit} className="w-full">
+              <Send className="w-4 h-4 mr-2" />
+              {t('submitStory')}
+            </Button>
+          )}
         </div>
       )}
     </div>

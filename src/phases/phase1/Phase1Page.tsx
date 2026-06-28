@@ -39,7 +39,7 @@ export function Phase1Page() {
       .from('leaderboard')
       .select('total_xp')
       .eq('student_id', profile.id)
-      .single()
+      .maybeSingle()
       .then(({ data }) => {
         if (data) setXp(data.total_xp)
       })

@@ -10,15 +10,14 @@ export function Phase4Page() {
   const [storyDone, setStoryDone] = useState(false)
   const [escapeDone, setEscapeDone] = useState(false)
   const [schoolName, setSchoolName] = useState('School')
+  const studentId = profile?.id || ''
 
   useEffect(() => {
-    supabase.from('admin_settings').select('value').eq('key', 'school_name').single()
+    supabase.from('admin_settings').select('value').eq('key', 'school_name').maybeSingle()
       .then(({ data }) => {
         if (data?.value) setSchoolName(data.value as string)
       })
   }, [])
-
-  if (!profile) return null
 
   return (
     <div className="min-h-screen bg-space p-6">
@@ -27,6 +26,14 @@ export function Phase4Page() {
           <h1 className="text-2xl font-bold text-text-primary font-display">Phase 4: Satisfaction</h1>
           <p className="text-text-muted">Create your story and escape the lab!</p>
         </div>
+
+        {!studentId && (
+          <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 text-center">
+            <p className="text-sm text-text-muted">
+              <a href="/register" className="text-primary hover:underline">Register</a> to save your story and escape room progress
+            </p>
+          </div>
+        )}
 
         <div className="grid grid-cols-2 gap-4 mb-8">
           <div className={`rounded-xl border p-4 ${storyDone ? 'border-accent bg-accent/5' : 'border-surface bg-surface/30'}`}>
@@ -41,14 +48,14 @@ export function Phase4Page() {
           </div>
         </div>
 
-        <StoryCreator studentId={profile.id} language={profile.language} onSubmitted={() => setStoryDone(true)} />
+        <StoryCreator studentId={studentId} language={profile?.language || 'en'} onSubmitted={() => setStoryDone(true)} />
         
-        <EscapeRoom studentId={profile.id} onComplete={() => setEscapeDone(true)} />
+        <EscapeRoom studentId={studentId} onComplete={() => setEscapeDone(true)} />
 
         {storyDone && escapeDone && (
           <div className="rounded-xl border border-accent/20 bg-surface/50 p-6">
             <h2 className="text-xl font-bold text-text-primary mb-4">Congratulations!</h2>
-            <Certificate studentName={profile.name} schoolName={schoolName} />
+            <Certificate studentName={profile?.name || 'Guest'} schoolName={schoolName} />
           </div>
         )}
       </div>

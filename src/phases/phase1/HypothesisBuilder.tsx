@@ -53,6 +53,8 @@ export function HypothesisBuilder({ studentId }: { studentId: string }) {
   const profile = useAuthStore(s => s.profile)
   const section = profile?.section || 'default'
 
+  if (!studentId) return null
+
   useEffect(() => {
     supabase
       .from('hypothesis_entries')
