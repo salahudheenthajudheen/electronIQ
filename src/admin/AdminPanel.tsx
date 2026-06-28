@@ -93,7 +93,7 @@ export function AdminPanel() {
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold text-text-primary font-display">Admin Panel</h1>
           <button
-            onClick={() => { signOut(); window.location.href = '/login' }}
+            onClick={() => { signOut(); window.location.href = '/admin/login' }}
             className="flex items-center gap-2 rounded-lg px-3 py-2 text-text-muted hover:text-text-primary hover:bg-surface/50 transition-all"
           >
             <LogOut className="w-4 h-4" />

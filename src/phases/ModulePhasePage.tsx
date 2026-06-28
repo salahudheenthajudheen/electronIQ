@@ -126,7 +126,7 @@ export default function ModulePhasePage() {
         )}
 
         {/* Phase navigation */}
-        <div className="flex items-center justify-between pt-4 border-t border-surface">
+        <div className="flex flex-col sm:flex-row items-center gap-3 justify-between pt-4 border-t border-surface">
           <div>
             {prevPhase ? (
               <Button

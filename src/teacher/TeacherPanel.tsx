@@ -78,7 +78,7 @@ export function TeacherPanel() {
               {frozen ? 'Unfreeze Screens' : 'Freeze Screens'}
             </Button>
             <button
-              onClick={() => { signOut(); window.location.href = '/login' }}
+              onClick={() => { signOut(); window.location.href = '/admin/login' }}
               className="flex items-center gap-2 rounded-lg px-3 py-2 text-text-muted hover:text-text-primary hover:bg-surface/50 transition-all"
             >
               <LogOut className="w-4 h-4" />
